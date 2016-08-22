@@ -15,6 +15,14 @@ pub trait Method: Sized {
     fn encode_method_frame(&self) -> AMQPResult<Vec<u8>> {
         MethodFrame::encode_method(self)
     }
+
+    fn to_frame(&self, channel: u16) -> AMQPResult<Frame> {
+        Ok(Frame {
+            frame_type: FrameType::METHOD,
+            channel: channel,
+            payload: try!(self.encode_method_frame()),
+        })
+    }
 }
 
 
