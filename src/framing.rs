@@ -22,6 +22,8 @@ pub struct Frame {
     pub payload: Vec<u8>,
 }
 
+unsafe impl Send for Frame {}
+
 impl Frame {
     pub fn decode<T: Read>(reader: &mut T) -> AMQPResult<Frame> {
         let mut header = [0u8; 7];
