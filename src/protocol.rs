@@ -157,7 +157,7 @@ pub mod connection {
 
 
     // Method 10:start
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Start {
         pub version_major: u8,
         pub version_minor: u8,
@@ -236,8 +236,10 @@ pub mod connection {
         }
     }
 
+    unsafe impl Send for Start {}
+
     // Method 11:start-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct StartOk {
         pub client_properties: Table,
         pub mechanism: String,
@@ -317,8 +319,10 @@ pub mod connection {
         }
     }
 
+    unsafe impl Send for StartOk {}
+
     // Method 20:secure
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Secure {
         pub challenge: String,
     }
@@ -362,8 +366,10 @@ pub mod connection {
     }
 
 
+    unsafe impl Send for Secure {}
+
     // Method 21:secure-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct SecureOk {
         pub response: String,
     }
@@ -407,8 +413,10 @@ pub mod connection {
     }
 
 
+    unsafe impl Send for SecureOk {}
+
     // Method 30:tune
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Tune {
         pub channel_max: u16,
         pub frame_max: u32,
@@ -465,8 +473,10 @@ pub mod connection {
         }
     }
 
+    unsafe impl Send for Tune {}
+
     // Method 31:tune-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct TuneOk {
         pub channel_max: u16,
         pub frame_max: u32,
@@ -523,8 +533,10 @@ pub mod connection {
         }
     }
 
+    unsafe impl Send for TuneOk {}
+
     // Method 40:open
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Open {
         pub virtual_host: String,
         pub capabilities: String,
@@ -600,8 +612,10 @@ pub mod connection {
         }
     }
 
+    unsafe impl Send for Open {}
+
     // Method 41:open-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct OpenOk {
         pub known_hosts: String,
     }
@@ -650,8 +664,10 @@ pub mod connection {
         }
     }
 
+    unsafe impl Send for OpenOk {}
+
     // Method 50:close
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Close {
         pub reply_code: u16,
         pub reply_text: String,
@@ -719,8 +735,10 @@ pub mod connection {
         }
     }
 
+    unsafe impl Send for Close {}
+
     // Method 51:close-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct CloseOk;
 
     impl Method for CloseOk {
@@ -752,8 +770,10 @@ pub mod connection {
     }
 
 
+    unsafe impl Send for CloseOk {}
+
     // Method 60:blocked
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Blocked {
         pub reason: String,
     }
@@ -802,8 +822,10 @@ pub mod connection {
         }
     }
 
+    unsafe impl Send for Blocked {}
+
     // Method 61:unblocked
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Unblocked;
 
     impl Method for Unblocked {
@@ -835,6 +857,8 @@ pub mod connection {
     }
 
 
+    unsafe impl Send for Unblocked {}
+
 }
 
 #[allow(unused_imports)]
@@ -852,7 +876,7 @@ pub mod channel {
 
 
     // Method 10:open
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Open {
         pub out_of_band: String,
     }
@@ -901,8 +925,10 @@ pub mod channel {
         }
     }
 
+    unsafe impl Send for Open {}
+
     // Method 11:open-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct OpenOk {
         pub channel_id: String,
     }
@@ -951,8 +977,10 @@ pub mod channel {
         }
     }
 
+    unsafe impl Send for OpenOk {}
+
     // Method 20:flow
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Flow {
         pub active: bool,
     }
@@ -997,8 +1025,10 @@ pub mod channel {
     }
 
 
+    unsafe impl Send for Flow {}
+
     // Method 21:flow-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct FlowOk {
         pub active: bool,
     }
@@ -1043,8 +1073,10 @@ pub mod channel {
     }
 
 
+    unsafe impl Send for FlowOk {}
+
     // Method 40:close
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Close {
         pub reply_code: u16,
         pub reply_text: String,
@@ -1112,8 +1144,10 @@ pub mod channel {
         }
     }
 
+    unsafe impl Send for Close {}
+
     // Method 41:close-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct CloseOk;
 
     impl Method for CloseOk {
@@ -1145,6 +1179,8 @@ pub mod channel {
     }
 
 
+    unsafe impl Send for CloseOk {}
+
 }
 
 #[allow(unused_imports)]
@@ -1162,7 +1198,7 @@ pub mod access {
 
 
     // Method 10:request
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Request {
         pub realm: String,
         pub exclusive: bool,
@@ -1259,8 +1295,10 @@ pub mod access {
         }
     }
 
+    unsafe impl Send for Request {}
+
     // Method 11:request-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct RequestOk {
         pub ticket: u16,
     }
@@ -1303,6 +1341,8 @@ pub mod access {
         }
     }
 
+    unsafe impl Send for RequestOk {}
+
 }
 
 #[allow(unused_imports)]
@@ -1320,7 +1360,7 @@ pub mod exchange {
 
 
     // Method 10:declare
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Declare {
         pub ticket: u16,
         pub exchange: String,
@@ -1444,8 +1484,10 @@ pub mod exchange {
         }
     }
 
+    unsafe impl Send for Declare {}
+
     // Method 11:declare-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct DeclareOk;
 
     impl Method for DeclareOk {
@@ -1477,8 +1519,10 @@ pub mod exchange {
     }
 
 
+    unsafe impl Send for DeclareOk {}
+
     // Method 20:delete
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Delete {
         pub ticket: u16,
         pub exchange: String,
@@ -1556,8 +1600,10 @@ pub mod exchange {
         }
     }
 
+    unsafe impl Send for Delete {}
+
     // Method 21:delete-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct DeleteOk;
 
     impl Method for DeleteOk {
@@ -1589,8 +1635,10 @@ pub mod exchange {
     }
 
 
+    unsafe impl Send for DeleteOk {}
+
     // Method 30:bind
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Bind {
         pub ticket: u16,
         pub destination: String,
@@ -1687,8 +1735,10 @@ pub mod exchange {
         }
     }
 
+    unsafe impl Send for Bind {}
+
     // Method 31:bind-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct BindOk;
 
     impl Method for BindOk {
@@ -1720,8 +1770,10 @@ pub mod exchange {
     }
 
 
+    unsafe impl Send for BindOk {}
+
     // Method 40:unbind
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Unbind {
         pub ticket: u16,
         pub destination: String,
@@ -1818,8 +1870,10 @@ pub mod exchange {
         }
     }
 
+    unsafe impl Send for Unbind {}
+
     // Method 51:unbind-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct UnbindOk;
 
     impl Method for UnbindOk {
@@ -1851,6 +1905,8 @@ pub mod exchange {
     }
 
 
+    unsafe impl Send for UnbindOk {}
+
 }
 
 #[allow(unused_imports)]
@@ -1868,7 +1924,7 @@ pub mod queue {
 
 
     // Method 10:declare
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Declare {
         pub ticket: u16,
         pub queue: String,
@@ -1980,8 +2036,10 @@ pub mod queue {
         }
     }
 
+    unsafe impl Send for Declare {}
+
     // Method 11:declare-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct DeclareOk {
         pub queue: String,
         pub message_count: u32,
@@ -2035,8 +2093,10 @@ pub mod queue {
     }
 
 
+    unsafe impl Send for DeclareOk {}
+
     // Method 20:bind
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Bind {
         pub ticket: u16,
         pub queue: String,
@@ -2133,8 +2193,10 @@ pub mod queue {
         }
     }
 
+    unsafe impl Send for Bind {}
+
     // Method 21:bind-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct BindOk;
 
     impl Method for BindOk {
@@ -2166,8 +2228,10 @@ pub mod queue {
     }
 
 
+    unsafe impl Send for BindOk {}
+
     // Method 30:purge
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Purge {
         pub ticket: u16,
         pub queue: String,
@@ -2237,8 +2301,10 @@ pub mod queue {
         }
     }
 
+    unsafe impl Send for Purge {}
+
     // Method 31:purge-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct PurgeOk {
         pub message_count: u32,
     }
@@ -2276,8 +2342,10 @@ pub mod queue {
     }
 
 
+    unsafe impl Send for PurgeOk {}
+
     // Method 40:delete
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Delete {
         pub ticket: u16,
         pub queue: String,
@@ -2363,8 +2431,10 @@ pub mod queue {
         }
     }
 
+    unsafe impl Send for Delete {}
+
     // Method 41:delete-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct DeleteOk {
         pub message_count: u32,
     }
@@ -2402,8 +2472,10 @@ pub mod queue {
     }
 
 
+    unsafe impl Send for DeleteOk {}
+
     // Method 50:unbind
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Unbind {
         pub ticket: u16,
         pub queue: String,
@@ -2488,8 +2560,10 @@ pub mod queue {
         }
     }
 
+    unsafe impl Send for Unbind {}
+
     // Method 51:unbind-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct UnbindOk;
 
     impl Method for UnbindOk {
@@ -2520,6 +2594,8 @@ pub mod queue {
         }
     }
 
+
+    unsafe impl Send for UnbindOk {}
 
 }
 
@@ -2882,7 +2958,7 @@ pub mod basic {
     }
 
     // Method 10:qos
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Qos {
         pub prefetch_size: u32,
         pub prefetch_count: u16,
@@ -2946,8 +3022,10 @@ pub mod basic {
         }
     }
 
+    unsafe impl Send for Qos {}
+
     // Method 11:qos-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct QosOk;
 
     impl Method for QosOk {
@@ -2979,8 +3057,10 @@ pub mod basic {
     }
 
 
+    unsafe impl Send for QosOk {}
+
     // Method 20:consume
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Consume {
         pub ticket: u16,
         pub queue: String,
@@ -3094,8 +3174,10 @@ pub mod basic {
         }
     }
 
+    unsafe impl Send for Consume {}
+
     // Method 21:consume-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct ConsumeOk {
         pub consumer_tag: String,
     }
@@ -3139,8 +3221,10 @@ pub mod basic {
     }
 
 
+    unsafe impl Send for ConsumeOk {}
+
     // Method 30:cancel
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Cancel {
         pub consumer_tag: String,
         pub nowait: bool,
@@ -3197,8 +3281,10 @@ pub mod basic {
     }
 
 
+    unsafe impl Send for Cancel {}
+
     // Method 31:cancel-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct CancelOk {
         pub consumer_tag: String,
     }
@@ -3242,8 +3328,10 @@ pub mod basic {
     }
 
 
+    unsafe impl Send for CancelOk {}
+
     // Method 40:publish
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Publish {
         pub ticket: u16,
         pub exchange: String,
@@ -3332,8 +3420,10 @@ pub mod basic {
         }
     }
 
+    unsafe impl Send for Publish {}
+
     // Method 50:return
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Return {
         pub reply_code: u16,
         pub reply_text: String,
@@ -3416,8 +3506,10 @@ pub mod basic {
         }
     }
 
+    unsafe impl Send for Return {}
+
     // Method 60:deliver
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Deliver {
         pub consumer_tag: String,
         pub delivery_tag: u64,
@@ -3498,8 +3590,10 @@ pub mod basic {
     }
 
 
+    unsafe impl Send for Deliver {}
+
     // Method 70:get
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Get {
         pub ticket: u16,
         pub queue: String,
@@ -3569,8 +3663,10 @@ pub mod basic {
         }
     }
 
+    unsafe impl Send for Get {}
+
     // Method 71:get-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct GetOk {
         pub delivery_tag: u64,
         pub redelivered: bool,
@@ -3645,8 +3741,10 @@ pub mod basic {
     }
 
 
+    unsafe impl Send for GetOk {}
+
     // Method 72:get-empty
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct GetEmpty {
         pub cluster_id: String,
     }
@@ -3695,8 +3793,10 @@ pub mod basic {
         }
     }
 
+    unsafe impl Send for GetEmpty {}
+
     // Method 80:ack
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Ack {
         pub delivery_tag: u64,
         pub multiple: bool,
@@ -3755,8 +3855,10 @@ pub mod basic {
         }
     }
 
+    unsafe impl Send for Ack {}
+
     // Method 90:reject
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Reject {
         pub delivery_tag: u64,
         pub requeue: bool,
@@ -3815,8 +3917,10 @@ pub mod basic {
         }
     }
 
+    unsafe impl Send for Reject {}
+
     // Method 100:recover-async
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct RecoverAsync {
         pub requeue: bool,
     }
@@ -3861,8 +3965,10 @@ pub mod basic {
     }
 
 
+    unsafe impl Send for RecoverAsync {}
+
     // Method 110:recover
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Recover {
         pub requeue: bool,
     }
@@ -3907,8 +4013,10 @@ pub mod basic {
     }
 
 
+    unsafe impl Send for Recover {}
+
     // Method 111:recover-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct RecoverOk;
 
     impl Method for RecoverOk {
@@ -3940,8 +4048,10 @@ pub mod basic {
     }
 
 
+    unsafe impl Send for RecoverOk {}
+
     // Method 120:nack
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Nack {
         pub delivery_tag: u64,
         pub multiple: bool,
@@ -4008,6 +4118,8 @@ pub mod basic {
         }
     }
 
+    unsafe impl Send for Nack {}
+
 }
 
 #[allow(unused_imports)]
@@ -4025,7 +4137,7 @@ pub mod tx {
 
 
     // Method 10:select
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Select;
 
     impl Method for Select {
@@ -4057,8 +4169,10 @@ pub mod tx {
     }
 
 
+    unsafe impl Send for Select {}
+
     // Method 11:select-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct SelectOk;
 
     impl Method for SelectOk {
@@ -4090,8 +4204,10 @@ pub mod tx {
     }
 
 
+    unsafe impl Send for SelectOk {}
+
     // Method 20:commit
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Commit;
 
     impl Method for Commit {
@@ -4123,8 +4239,10 @@ pub mod tx {
     }
 
 
+    unsafe impl Send for Commit {}
+
     // Method 21:commit-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct CommitOk;
 
     impl Method for CommitOk {
@@ -4156,8 +4274,10 @@ pub mod tx {
     }
 
 
+    unsafe impl Send for CommitOk {}
+
     // Method 30:rollback
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Rollback;
 
     impl Method for Rollback {
@@ -4189,8 +4309,10 @@ pub mod tx {
     }
 
 
+    unsafe impl Send for Rollback {}
+
     // Method 31:rollback-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct RollbackOk;
 
     impl Method for RollbackOk {
@@ -4222,6 +4344,8 @@ pub mod tx {
     }
 
 
+    unsafe impl Send for RollbackOk {}
+
 }
 
 #[allow(unused_imports)]
@@ -4239,7 +4363,7 @@ pub mod confirm {
 
 
     // Method 10:select
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct Select {
         pub nowait: bool,
     }
@@ -4284,8 +4408,10 @@ pub mod confirm {
     }
 
 
+    unsafe impl Send for Select {}
+
     // Method 11:select-ok
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct SelectOk;
 
     impl Method for SelectOk {
@@ -4316,5 +4442,7 @@ pub mod confirm {
         }
     }
 
+
+    unsafe impl Send for SelectOk {}
 
 }

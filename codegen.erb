@@ -135,7 +135,7 @@ pub mod <%= klass["name"] %> {
 
 <% klass["methods"].each do |method| -%>
     // Method <%= method["id"] %>:<%=method["name"] %>
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
 <% if method["fields"].any? -%>
     pub struct <%= method["method_name"] %> {
 <% method["fields"].join(",\n").split("\n").each do |f| -%>
@@ -199,6 +199,8 @@ pub mod <%= klass["name"] %> {
         }
     }
 <% end #method["arguments"].any-%>
+
+    unsafe impl Send for <%= method["method_name"] %> {}
 
 <% end #methods each-%>
 }
