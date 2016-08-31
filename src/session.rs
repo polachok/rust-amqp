@@ -1,14 +1,13 @@
-use protocol::{self, MethodFrame};
+use protocol::{self, Method};
 use table::Table;
 use table::TableEntry::{FieldTable, Bool, LongString};
-use framing::{Frame, FrameType};
+use framing::{Frame, FrameType, MethodFrame, ContentHeaderFrame};
 use amqp_error::{AMQPResult, AMQPError};
-use protocol::Method;
 use super::VERSION;
 
 use std::cmp;
 use std::io;
-use byteorder::{BigEndian, ReadBytesExt, WriteBytesExt};
+use byteorder::{BigEndian, ReadBytesExt};
 use enum_primitive::FromPrimitive;
 
 use futures::{Future, BoxFuture, finished, done, failed};
