@@ -2,18 +2,18 @@
 // To make changes to this file, edit codegen.rb and/or codegen.erb and run make
 
 use framing::{FrameType, Frame, MethodFrame};
-use amqp_error::{AMQPError, AMQPResult};
+use amqp_error::AMQPResult;
 
 pub trait Method {
+    fn name() -> &'static str;
+    fn id() -> u16;
+    fn class_id() -> u16;
     fn decode(method_frame: MethodFrame) -> AMQPResult<Self> where Self: Sized;
     fn encode(&self) -> AMQPResult<Vec<u8>>;
-    fn name(&self) -> &'static str;
-    fn id(&self) -> u16;
-    fn class_id(&self) -> u16;
     fn encode_method_frame(&self) -> AMQPResult<Vec<u8>> {
         let frame = MethodFrame {
-            class_id: self.class_id(),
-            method_id: self.id(),
+            class_id: <Self as Method>::class_id(),
+            method_id: <Self as Method>::id(),
             arguments: try!(self.encode()),
         };
         frame.encode()
@@ -54,15 +54,15 @@ pub mod connection {
     }
 
     impl Method for Start {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.start"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             10
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -133,15 +133,15 @@ pub mod connection {
     }
 
     impl Method for StartOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.start-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             11
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -211,15 +211,15 @@ pub mod connection {
     }
 
     impl Method for Secure {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.secure"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             20
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -256,15 +256,15 @@ pub mod connection {
     }
 
     impl Method for SecureOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.secure-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             21
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -303,15 +303,15 @@ pub mod connection {
     }
 
     impl Method for Tune {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.tune"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             30
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -361,15 +361,15 @@ pub mod connection {
     }
 
     impl Method for TuneOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.tune-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             31
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -419,15 +419,15 @@ pub mod connection {
     }
 
     impl Method for Open {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.open"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             40
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -494,15 +494,15 @@ pub mod connection {
     }
 
     impl Method for OpenOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.open-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             41
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -547,15 +547,15 @@ pub mod connection {
     }
 
     impl Method for Close {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.close"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             50
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -611,15 +611,15 @@ pub mod connection {
     pub struct CloseOk;
 
     impl Method for CloseOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.close-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             51
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -646,15 +646,15 @@ pub mod connection {
     }
 
     impl Method for Blocked {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.blocked"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             60
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -694,15 +694,15 @@ pub mod connection {
     pub struct Unblocked;
 
     impl Method for Unblocked {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "connection.unblocked"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             61
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             10
         }
 
@@ -745,15 +745,15 @@ pub mod channel {
     }
 
     impl Method for Open {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "channel.open"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             10
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             20
         }
 
@@ -795,15 +795,15 @@ pub mod channel {
     }
 
     impl Method for OpenOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "channel.open-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             11
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             20
         }
 
@@ -845,15 +845,15 @@ pub mod channel {
     }
 
     impl Method for Flow {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "channel.flow"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             20
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             20
         }
 
@@ -891,15 +891,15 @@ pub mod channel {
     }
 
     impl Method for FlowOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "channel.flow-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             21
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             20
         }
 
@@ -940,15 +940,15 @@ pub mod channel {
     }
 
     impl Method for Close {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "channel.close"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             40
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             20
         }
 
@@ -1004,15 +1004,15 @@ pub mod channel {
     pub struct CloseOk;
 
     impl Method for CloseOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "channel.close-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             41
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             20
         }
 
@@ -1060,15 +1060,15 @@ pub mod access {
     }
 
     impl Method for Request {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "access.request"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             10
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             30
         }
 
@@ -1153,15 +1153,15 @@ pub mod access {
     }
 
     impl Method for RequestOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "access.request-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             11
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             30
         }
 
@@ -1221,15 +1221,15 @@ pub mod exchange {
     }
 
     impl Method for Declare {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "exchange.declare"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             10
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             40
         }
 
@@ -1336,15 +1336,15 @@ pub mod exchange {
     pub struct DeclareOk;
 
     impl Method for DeclareOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "exchange.declare-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             11
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             40
         }
 
@@ -1374,15 +1374,15 @@ pub mod exchange {
     }
 
     impl Method for Delete {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "exchange.delete"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             20
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             40
         }
 
@@ -1448,15 +1448,15 @@ pub mod exchange {
     pub struct DeleteOk;
 
     impl Method for DeleteOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "exchange.delete-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             21
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             40
         }
 
@@ -1488,15 +1488,15 @@ pub mod exchange {
     }
 
     impl Method for Bind {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "exchange.bind"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             30
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             40
         }
 
@@ -1579,15 +1579,15 @@ pub mod exchange {
     pub struct BindOk;
 
     impl Method for BindOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "exchange.bind-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             31
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             40
         }
 
@@ -1619,15 +1619,15 @@ pub mod exchange {
     }
 
     impl Method for Unbind {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "exchange.unbind"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             40
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             40
         }
 
@@ -1710,15 +1710,15 @@ pub mod exchange {
     pub struct UnbindOk;
 
     impl Method for UnbindOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "exchange.unbind-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             51
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             40
         }
 
@@ -1768,15 +1768,15 @@ pub mod queue {
     }
 
     impl Method for Declare {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "queue.declare"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             10
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             50
         }
 
@@ -1876,15 +1876,15 @@ pub mod queue {
     }
 
     impl Method for DeclareOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "queue.declare-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             11
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             50
         }
 
@@ -1934,15 +1934,15 @@ pub mod queue {
     }
 
     impl Method for Bind {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "queue.bind"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             20
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             50
         }
 
@@ -2025,15 +2025,15 @@ pub mod queue {
     pub struct BindOk;
 
     impl Method for BindOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "queue.bind-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             21
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             50
         }
 
@@ -2062,15 +2062,15 @@ pub mod queue {
     }
 
     impl Method for Purge {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "queue.purge"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             30
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             50
         }
 
@@ -2131,15 +2131,15 @@ pub mod queue {
     }
 
     impl Method for PurgeOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "queue.purge-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             31
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             50
         }
 
@@ -2174,15 +2174,15 @@ pub mod queue {
     }
 
     impl Method for Delete {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "queue.delete"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             40
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             50
         }
 
@@ -2257,15 +2257,15 @@ pub mod queue {
     }
 
     impl Method for DeleteOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "queue.delete-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             41
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             50
         }
 
@@ -2300,15 +2300,15 @@ pub mod queue {
     }
 
     impl Method for Unbind {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "queue.unbind"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             50
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             50
         }
 
@@ -2380,15 +2380,15 @@ pub mod queue {
     pub struct UnbindOk;
 
     impl Method for UnbindOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "queue.unbind-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             51
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             50
         }
 
@@ -2777,15 +2777,15 @@ pub mod basic {
     }
 
     impl Method for Qos {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.qos"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             10
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -2838,15 +2838,15 @@ pub mod basic {
     pub struct QosOk;
 
     impl Method for QosOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.qos-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             11
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -2880,15 +2880,15 @@ pub mod basic {
     }
 
     impl Method for Consume {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.consume"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             20
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -2988,15 +2988,15 @@ pub mod basic {
     }
 
     impl Method for ConsumeOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.consume-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             21
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3034,15 +3034,15 @@ pub mod basic {
     }
 
     impl Method for Cancel {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.cancel"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             30
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3091,15 +3091,15 @@ pub mod basic {
     }
 
     impl Method for CancelOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.cancel-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             31
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3140,15 +3140,15 @@ pub mod basic {
     }
 
     impl Method for Publish {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.publish"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             40
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3229,15 +3229,15 @@ pub mod basic {
     }
 
     impl Method for Return {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.return"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             50
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3314,15 +3314,15 @@ pub mod basic {
     }
 
     impl Method for Deliver {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.deliver"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             60
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3394,15 +3394,15 @@ pub mod basic {
     }
 
     impl Method for Get {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.get"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             70
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3467,15 +3467,15 @@ pub mod basic {
     }
 
     impl Method for GetOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.get-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             71
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3539,15 +3539,15 @@ pub mod basic {
     }
 
     impl Method for GetEmpty {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.get-empty"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             72
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3590,15 +3590,15 @@ pub mod basic {
     }
 
     impl Method for Ack {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.ack"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             80
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3650,15 +3650,15 @@ pub mod basic {
     }
 
     impl Method for Reject {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.reject"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             90
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3709,15 +3709,15 @@ pub mod basic {
     }
 
     impl Method for RecoverAsync {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.recover-async"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             100
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3755,15 +3755,15 @@ pub mod basic {
     }
 
     impl Method for Recover {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.recover"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             110
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3799,15 +3799,15 @@ pub mod basic {
     pub struct RecoverOk;
 
     impl Method for RecoverOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.recover-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             111
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3836,15 +3836,15 @@ pub mod basic {
     }
 
     impl Method for Nack {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "basic.nack"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             120
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             60
         }
 
@@ -3916,15 +3916,15 @@ pub mod tx {
     pub struct Select;
 
     impl Method for Select {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "tx.select"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             10
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             90
         }
 
@@ -3949,15 +3949,15 @@ pub mod tx {
     pub struct SelectOk;
 
     impl Method for SelectOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "tx.select-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             11
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             90
         }
 
@@ -3982,15 +3982,15 @@ pub mod tx {
     pub struct Commit;
 
     impl Method for Commit {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "tx.commit"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             20
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             90
         }
 
@@ -4015,15 +4015,15 @@ pub mod tx {
     pub struct CommitOk;
 
     impl Method for CommitOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "tx.commit-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             21
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             90
         }
 
@@ -4048,15 +4048,15 @@ pub mod tx {
     pub struct Rollback;
 
     impl Method for Rollback {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "tx.rollback"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             30
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             90
         }
 
@@ -4081,15 +4081,15 @@ pub mod tx {
     pub struct RollbackOk;
 
     impl Method for RollbackOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "tx.rollback-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             31
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             90
         }
 
@@ -4132,15 +4132,15 @@ pub mod confirm {
     }
 
     impl Method for Select {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "confirm.select"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             10
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             85
         }
 
@@ -4176,15 +4176,15 @@ pub mod confirm {
     pub struct SelectOk;
 
     impl Method for SelectOk {
-        fn name(&self) -> &'static str {
+        fn name() -> &'static str {
             "confirm.select-ok"
         }
 
-        fn id(&self) -> u16 {
+        fn id() -> u16 {
             11
         }
 
-        fn class_id(&self) -> u16 {
+        fn class_id() -> u16 {
             85
         }
 
