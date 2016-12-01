@@ -2,6 +2,8 @@
 // To make changes to this file, edit codegen.rb and/or codegen.erb and run make
 
 pub use framing::{FrameType, Frame, MethodFrame};
+pub use table::Table;
+pub use table::TableEntry::*;
 use amqp_error::AMQPResult;
 
 pub trait Method {
